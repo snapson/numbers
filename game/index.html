@@ -5,10 +5,25 @@
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href='./style.css' rel='stylesheet' type='text/css'>
 
-<h1 id='score'>Your score: <span>0</span></h1>
-<div id='problem'></div>
-<ul id='answers'>
-	<li id='one'></li>
-	<li id='two'></li>
-	<li id='three'></li>
-</ul>
+<div id='content'>
+	<section id='exist' style='display: block;'>
+		<header>
+			<h1 id='score'>Your score: <span>0</span></h1>	
+		</header>
+		<div id='problem'></div>
+		<ul id='answers'>
+			<li id='one'></li>
+			<li id='two'></li>
+			<li id='three'></li>
+		</ul>	
+	</section>
+	<section id='non-exist'>
+		<form name='user-form' id='user-form'>
+			<input type='text' name='username' placeholder='Enter you login' id='username' />
+			<input type='submit' value="Ok, let' go!" />
+			<input type='clear' value='This is not me!' />
+		</form>
+	</section>
+</div>
+
+
