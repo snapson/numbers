@@ -9,6 +9,10 @@ app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 });
 
+app.get('/index.js', function (req, res) {
+  res.sendfile(__dirname + '/index.js');
+});
+
 io.sockets.on('connection', function (socket) {
 
 	socket.emit('numberGen', core.problem());
@@ -24,5 +28,27 @@ io.sockets.on('connection', function (socket) {
 		socket.emit('numberGen', core.problem());
 		count = 0; 
 		socket.emit('updateCounter', { count : count });
+	});
+	
+	//User's action
+	socket.on('saveUser', function(data) {
+		socket.emit('savedUser', core.setUser(data));
+		
+		console.log('LOG::saveUser', data);
+	});
+	socket.on('removeUser', function(data) {
+		socket.emit('removedUser', core.removeUserById(data.user.id));
+		
+		console.log('LOG::removeUser', data);
+	});
+	socket.on('getUserById', function(data) {
+		socket.emit('reqUser', core.getUserById(data.user.id));
+		
+		console.log('LOG::getUserById', data);	
+	});
+	socket.on('getUsers', function() {
+		socket.emit('resUsers', core.getStoredUsers());
+		
+		console.log('LOG::getUsers');
 	});
 });
