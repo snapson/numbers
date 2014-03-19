@@ -18,6 +18,8 @@ var Core = new function() {
 	this.setUser = function(user) {
 		if(user) {
 			this.users.push(user);
+			this.saveUsers();
+			
 			return user
 		} else {
 			throw new Error('You need pass a user object!');
@@ -36,6 +38,7 @@ var Core = new function() {
 	this.removeUserById = function(userID) {
 		if(userID) {
 			delete this.users[userID];
+			this.saveUsers();
 			
 			return 'The user with id ' + userID + ' was deleted';
 		} else {
@@ -44,9 +47,11 @@ var Core = new function() {
 	}
 	this.saveUsers = function() {
 		sessionStorage.setItem('users', this.users);
+		
+		return this.getStoredUsers();
 	}
 	this.getStoredUsers = function() {
-		$.parseJSON( sessionStorage.getItem('users') );
+		return $.parseJSON( sessionStorage.getItem('users') );
 	}
 };
 
