@@ -5,12 +5,17 @@ var app = require('express')()
 
 server.listen(8054);
 
+//Add files
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 });
 
 app.get('/index.js', function (req, res) {
   res.sendfile(__dirname + '/index.js');
+});
+
+app.get('/style.css', function (req, res) {
+  res.sendfile(__dirname + '/style.css');
 });
 
 io.sockets.on('connection', function (socket) {
