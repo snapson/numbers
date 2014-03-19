@@ -6,7 +6,7 @@
 <link href='./style.css' rel='stylesheet' type='text/css'>
 
 <div id='content'>
-	<section id='exist' style='display: block;'>
+	<section id='exist' style='display: none;'>
 		<header>
 			<h1 id='score'>Your score: <span>0</span></h1>	
 		</header>
@@ -18,10 +18,10 @@
 		</ul>	
 	</section>
 	<section id='non-exist'>
-		<form name='user-form' id='user-form'>
+		<form name='user-form' id='user-form' method='post'>
 			<input type='text' name='username' placeholder='Enter you login' id='username' />
 			<input type='submit' value="Ok, let' go!" />
-			<input type='clear' value='This is not me!' />
+			<input type='reset' value='This is not me!' />
 		</form>
 	</section>
 </div>

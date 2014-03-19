@@ -1,11 +1,14 @@
 var Core = new function() {
-	this.users = [];
+	/*
 	this.onProblemGenerated = [];
 	this.runProblemGeneratedHandlers = function(){
 		for(var i=0; i<onProblemGenerated.length; i++){
 			this.onProblemGenerated[i]();
 		}
 	}
+	*/
+
+	this.users = [];
 	this.problem = function() {
 		var a = Math.ceil(Math.random()*101);
 		var b = Math.ceil(Math.random()*101);
@@ -13,16 +16,24 @@ var Core = new function() {
 		var fakeB = Math.ceil(Math.random()*101);
 		var solution = a + b;
 
-		return {a: a, b: b, fake: [fakeA, fakeB, solution], solution: solution };
+		return {
+				a: a, 
+				b: b, 
+				fake: [fakeA, fakeB, solution], 
+				solution: solution
+			};
 	}
 	this.setUser = function(user) {
-		if(user) {
+		if(user && user.id != this.users.length) {
+			user.id = this.users.length;
+			user.score = 0;
 			this.users.push(user);
-			this.saveUsers();
 			
+			console.log("CORE::setUser", user);	
+
 			return user
 		} else {
-			throw new Error('You need pass a user object!');
+			throw new Error('You need pass a user object or user is already exist!');
 		}
 	}
 	this.getUserById = function(userID) {
@@ -38,20 +49,11 @@ var Core = new function() {
 	this.removeUserById = function(userID) {
 		if(userID) {
 			delete this.users[userID];
-			this.saveUsers();
 			
 			return 'The user with id ' + userID + ' was deleted';
 		} else {
 			throw new Error('You need pass a userID!');
 		}
-	}
-	this.saveUsers = function() {
-		sessionStorage.setItem('users', this.users);
-		
-		return this.getStoredUsers();
-	}
-	this.getStoredUsers = function() {
-		return $.parseJSON( sessionStorage.getItem('users') );
 	}
 };
 

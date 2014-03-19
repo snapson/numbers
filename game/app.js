@@ -1,7 +1,7 @@
 var app = require('express')()
   , server = require('http').createServer(app)
   , io = require('socket.io').listen(server),
-  core = require('./core'), count = 0;
+  core = require('./core'), count = 0, counts = {};
 
 server.listen(8054);
 
@@ -20,39 +20,41 @@ app.get('/style.css', function (req, res) {
 
 io.sockets.on('connection', function (socket) {
 
-	socket.emit('numberGen', core.problem());
-
-	socket.on('genNewNum', function() {
+	socket.on('genNewNum', function(user) {
 		socket.emit('numberGen', core.problem());
-		count++;
+		counts[user.name]++;
 		
-		socket.emit('updateCounter', { count : count });
+		socket.emit('updateCounter', counts[user.name]);
 	});
 
-	socket.on('clearCount', function() {
+	socket.on('clearCount', function(user) {
 		socket.emit('numberGen', core.problem());
-		count = 0; 
-		socket.emit('updateCounter', { count : count });
+		counts[user.name] = 0; 
+		socket.emit('updateCounter', counts[user.name]);
 	});
 	
 	//User's action
-	socket.on('saveUser', function(data) {
-		socket.emit('savedUser', core.setUser(data));
+	socket.on('saveUser', function(user) {
+		socket.emit('savedUser', core.setUser(user));
+
+		counts[user.name] = 0;
+		console.log('APP::saveUser', user);
 		
-		console.log('LOG::saveUser', data);
+		socket.emit('numberGen', core.problem());
 	});
-	socket.on('removeUser', function(data) {
-		socket.emit('removedUser', core.removeUserById(data.user.id));
+	socket.on('removeUser', function(user) {
+		socket.emit('removedUser', core.removeUserById(user.user.id));
+		delete counts[user.name];
 		
-		console.log('LOG::removeUser', data);
+		console.log('LOG::removeUser', user);
 	});
-	socket.on('getUserById', function(data) {
-		socket.emit('reqUser', core.getUserById(data.user.id));
+	socket.on('getUserById', function(user) {
+		socket.emit('reqUser', core.getUserById(user.user.id));
 		
-		console.log('LOG::getUserById', data);	
+		console.log('LOG::getUserById', user);	
 	});
 	socket.on('getUsers', function() {
-		socket.emit('resUsers', core.getStoredUsers());
+		socket.emit('resUsers', core.getUsers());
 		
 		console.log('LOG::getUsers');
 	});
