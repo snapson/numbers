@@ -1,77 +1,9 @@
 <script src='/socket.io/socket.io.js'></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-<script>
-$('document').ready(function() {
-	var socket = io.connect('http://localhost');
-	var Solver = new function() {
-		this.data = null;
-		this.answ = $('#answers');
-		this.wrap = $('#problem');
-		this.lis = { one: $('#one'), two: $('#two'), three: $('#three') };
-		this.updateHTML = function(data) {
-			this.data = data;
-			var arr = this.shuffle();
-
-			this.wrap.html(data.a + ' + ' + data.b + ' = ?');			
-			this.lis.one.html(arr[0]);
-			this.lis.two.html(arr[1]);
-			this.lis.three.html(arr[2]);
-		};
-		this.shuffle = function() {
-			var fake = this.data.fake;
-			for(var j, x, i = fake.length; i; j = Math.floor(Math.random() * i), x = fake[--i], fake[i] = fake[j], fake[j] = x);
-			return fake;
-		};
-
-		this.init = function() {
-			this.answ.on('click', 'li', function() {
-                                if( $(this).html() == Solver.data.solution ) { 
-                                        socket.emit('genNewNum');
-                                        console.log('INC');
-                                } else { 
-                                        socket.emit('clearCount');
-                                        console.log('CLEAR');
-                                }          
-                        });
-		}
-
-
-	};
-
-	Solver.init();
-	socket.on('numberGen', function(data) { Solver.updateHTML(data); });
-	socket.on('updateCounter', function(data) { $('#score span').html(data.count); });
-});
-</script>
+<script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js'></script>
+<script src='./index.js'></script>
 
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-<style>
-	body { 
-		margin: 10px; 
-		padding: 0; 
-		font-family: 'Ubuntu Mono'
-	}
-	ul {
-		padding: 0;
-		display: inline-block;
-		border: 2px solid green;
-		border-radius: 5px;
-	}
-	ul li { 
-		list-style: none; 
-		width: 50px; 
-		height: 50px; 
-		display: inline-block; 
-		margin: 0 3px; 
-		cursor: pointer; 
-		text-align: center;
-		font-size: 21px;
-		line-height: 50px;
-	}
-	ul li:hover {
-		color: red;
-	}
-</style>
+<link href='./style.css' rel='stylesheet' type='text/css'>
 
 <h1 id='score'>Your score: <span>0</span></h1>
 <div id='problem'></div>
