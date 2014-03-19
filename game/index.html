@@ -10,9 +10,9 @@ $('document').ready(function() {
 		this.lis = { one: $('#one'), two: $('#two'), three: $('#three') };
 		this.updateHTML = function(data) {
 			this.data = data;
-			this.wrap.html(data.a + ' + ' + data.b + ' = ?');
 			var arr = this.shuffle();
-			
+
+			this.wrap.html(data.a + ' + ' + data.b + ' = ?');			
 			this.lis.one.html(arr[0]);
 			this.lis.two.html(arr[1]);
 			this.lis.three.html(arr[2]);
