@@ -7,8 +7,11 @@ $('document').ready(function() {
 			lis: { one: $('#one'), two: $('#two'), three: $('#three') },
 			userForm: $('#user-form'),
 			exist: $('#exist'),
-			nonExist: $('#non-exist')
+			nonExist: $('#non-exist'),
+			score: $('#score span')
 		};
+		this.currentUser = null;
+		this.count = 0;
 		this.data = null;
 		this.updateHTML = function(data) {
 			this.data = data;
@@ -28,31 +31,41 @@ $('document').ready(function() {
 			if(user) {
 				this.ui.exist.fadeToggle();
 				this.ui.nonExist.fadeToggle();
-				this.updateStorage(user);
-
-				console.log('LOG::newUser::User has been saved!', user);
+				this.currentUser = user;
+				this.updateStorage();
 			}	
 		}
-		this.updateStorage = function(user) {
+		this.updateStorage = function() {
 			var item = localStorage.getItem('users');
 			var storage = item ? JSON.parse(item) : {};
-
-			storage[user.name] = {
-				id: user.id,
-				score: user.score
+			var ID = this.currentUser.id; 
+			var NAME = this.currentUser.name;
+			var SCORE = this.count;
+			storage[ID] = {
+				name: NAME,
+				score: SCORE
 			};
-			console.log("LOG::updateStorage::storage", storage);
 			localStorage.setItem('users', JSON.stringify(storage));
+		};
+		this.updateCount = function() {
+			this.count++;
+			this.ui.score.html(this.count);
+			this.updateStorage();
+		};
+		this.clearCount = function() {
+			this.count = 0;
+			this.ui.score.html(this.count);
+			this.updateStorage();
 		}
 		this.init = function() {
 			this.ui.answers.on('click', 'li', function() {
-				var user = JSON.parse( localStorage.getItem('users') );
-
-                if( user && $(this).html() == Solver.data.solution ) { 
-                        socket.emit('genNewNum', user);
-                } else { 
-                        socket.emit('clearCount', user);
+                if( $(this).html() == Solver.data.solution ) { 
+                        Solver.updateCount();
+                } else {
+                        Solver.clearCount();
                 }          
+
+                socket.emit('genNewNum', JSON.parse( localStorage.getItem('users') ));
             });
 			this.ui.userForm.on('submit', function(event) {
 				event.preventDefault();
@@ -62,13 +75,11 @@ $('document').ready(function() {
 
 				socket.emit('saveUser', user);
 			});
-		}
-
-
+		};
 	};
+
 	Solver.init();
 
 	socket.on('numberGen', function(data) { Solver.updateHTML(data); });
-	socket.on('updateCounter', function(count) { console.log(count, "count"); $('#score span').html(count); });
 	socket.on('savedUser', function(data) { Solver.newUser(data); });
 });
