@@ -25,8 +25,8 @@ app.get('/user-action.js', function (req, res) {
 
 io.sockets.on('connection', function (socket) {
 
-	socket.on('genNewNum', function() {
-		socket.emit('numberGen', Core.problem());
+	socket.on('getCurrentProblem', function() {
+		socket.emit('numberGen', Core.getCurrentProblem());
 	});
 	
 	//User's action

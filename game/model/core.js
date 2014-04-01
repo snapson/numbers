@@ -1,4 +1,6 @@
 var Core = new function() {
+	this.currentProblem = null;
+
 	this.problem = function() {
 		var a = Math.ceil(Math.random()*101);
 		var b = Math.ceil(Math.random()*101);
@@ -12,6 +14,12 @@ var Core = new function() {
 			fake: [fakeA, fakeB, solution], 
 			solution: solution
 		};
+	}
+	this.getProblem  = function() {
+		return this.currentProblem;
+	}
+	this.setProblem  = function() {
+		this.currentProblem = this.getProblem();
 	}
 };
 

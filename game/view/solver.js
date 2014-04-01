@@ -19,16 +19,11 @@ var Solver = new function() {
 	this.updateCount = function() {
 		this.count++;
 		ui.score.html(this.count);
-		this.updateStorage();
 	};
 	this.clearCount = function() {
 		this.count = 0;
 		ui.score.html(this.count);
-		this.updateStorage();
 	}
-	this.updateStorage = function() {
-		
-	};
 	this.init = function() {
 		ui.answers.on('click', 'li', function() {
             if( $(this).html() == Solver.data.solution ) { 
@@ -37,7 +32,7 @@ var Solver = new function() {
                 Solver.clearCount();
             }          
 
-            socket.emit('genNewNum');
+            socket.emit('getCurrentProblem');
         });
 
 		ui.userForm.on('submit', function(event) {

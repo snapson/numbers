@@ -1,10 +1,9 @@
 var User = new function() {
-	this.users = [];
+	this.users = new Object();
+
 	this.setUser = function(user) {
-		if(user && user.id != this.users.length) {
-			user.id = this.users.length;
-			user.score = 0;
-			this.users.push(user);
+		if(user) {
+			this.users[user.name] = user;
 
 			return user
 		} else {
@@ -14,6 +13,7 @@ var User = new function() {
 	this.getUsers = function() {
 		return this.users;
 	}
+	/*
 	this.removeUserById = function(userID) {
 		if(userID) {
 			delete this.users[userID];
@@ -23,6 +23,7 @@ var User = new function() {
 			throw new Error('You need pass a userID!');
 		}
 	}
+	*/
 };
 
 module.exports = User;

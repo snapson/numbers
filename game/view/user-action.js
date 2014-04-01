@@ -6,7 +6,7 @@ var User = new function() {
 			ui.exist.fadeToggle();
 			ui.nonExist.fadeToggle();
 			this.currentUser = user;
-			this.updateStorage();
+			socket.emit('getUsers');
 		}	
 	}
 }

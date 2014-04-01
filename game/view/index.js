@@ -16,3 +16,4 @@ Solver.init();
 
 socket.on('numberGen', function(data) { Solver.updateHTML(data); });
 socket.on('savedUser', function(data) { User.add(data); });
+socket.on('resUsers', function(data) { console.log('LOG::resUsers::data', data); });
