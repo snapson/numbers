@@ -1,0 +1,18 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mocha Tests</title>
+  <link rel="stylesheet" href="../game/node_modules/mocha/mocha.css" />
+</head>
+<body>
+  <div id="mocha"></div>
+  <script src="../game/node_modules/mocha/mocha.js"></script>
+  <script src="../game/node_modules/chai/chai.js"></script>
+  <script>mocha.setup('bdd')</script>
+  <script src="asserts.js"></script>
+  <script>
+    mocha.checkLeaks();
+    mocha.run();
+  </script>
+</body>
+</html>

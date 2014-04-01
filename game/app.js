@@ -2,13 +2,20 @@ var app = require('express')(),
 	server = require('http').createServer(app),
 	io = require('socket.io').listen(server),
   	Core = require('./model/core'),
-  	User = require('./model/user');
+  	User = require('./model/user'),
+  	jade = require('jade');
 
 server.listen(8054);
 //
 //Add files
+//
 app.get('/', function (req, res) {
-  	res.sendfile(__dirname + '/view/index.html');
+	var problems = Core.createProblems(10);	
+  	var options = { data : { pageTitle : "JADE!!!", problems : problems } };
+	var html = jade.renderFile('view/template.jade', options);
+  	res.writeHeader(200, {"Content-Type": "text/html"});  
+    res.write(html);  
+    res.end(); 
 });
 app.get('/style.css', function (req, res) {
   	res.sendfile(__dirname + '/view/style.css');
@@ -16,15 +23,8 @@ app.get('/style.css', function (req, res) {
 app.get('/index.js', function (req, res) {
   	res.sendfile(__dirname + '/view/index.js');
 });
-app.get('/solver.js', function (req, res) {
-  	res.sendfile(__dirname + '/view/solver.js');
-});
-app.get('/user-action.js', function (req, res) {
-  	res.sendfile(__dirname + '/view/user-action.js');
-});
-
+/*
 io.sockets.on('connection', function (socket) {
-
 	socket.on('genNewNum', function() {
 		socket.emit('numberGen', Core.problem());
 	});
@@ -48,3 +48,4 @@ io.sockets.on('connection', function (socket) {
 		console.log('LOG::APP::getUsers');
 	});
 });
+*/

@@ -1,18 +1,27 @@
-var socket = io.connect('http://192.168.4.137/');
-var ui = {
-	answers: $('#answers'),
-	problem: $('#problem'),
-	lis: { one: $('#one'), two: $('#two'), three: $('#three') },
-	userForm: $('#user-form'),
-	exist: $('#exist'),
-	nonExist: $('#non-exist'),
-	score: $('#score span')
+var View = new function() {
+	this.count = 0;
+	this.data = null;
+	this.socket = null;
+
+	this.insertBlocks = function(){
+		for(var i=0; i<args.problems.length; i++){
+			var block = $("<div>",{
+				id : "n-block-" + i,
+				"class" : 'n-block',
+				height : 50,
+				width : 200
+			}).css({				
+				"border-style" : "solid",
+				"border-width" : "5px"
+			}).html(args.problems[i].str).appendTo(document.body);	
+
+		}	
+		console.log(args);
+	}
+	this.init = function() {
+		this.socket = io.connect('http://localhost/');
+		View.insertBlocks();
+	}
 };
+View.init();
 
-console.log('LOG::User', User);
-console.log('LOG::Solver', Solver);
-
-Solver.init();
-
-socket.on('numberGen', function(data) { Solver.updateHTML(data); });
-socket.on('savedUser', function(data) { User.add(data); });
